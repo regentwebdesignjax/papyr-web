@@ -24,15 +24,7 @@ No build step, no dependencies. Open `index.html` or serve the folder statically
   animations (IntersectionObserver), a grain overlay, and full `prefers-reduced-motion`
   support. Nav links collapse below 640px.
 
-## ⚠️ App screenshots are placeholders
-
-The app screenshots and app icon under `assets/ios`, `assets/ipad`, `assets/mac`, and
-`assets/papyr-app-icon.png` are **branded placeholder mockups** generated in the app's
-palette. The original high-resolution App Store screenshots exceeded the design import
-tool's per-file read limit and could not be retrieved in full.
-
-To ship the real imagery, drop the originals in at these exact paths (filenames are already
-referenced by `index.html`):
+## Assets
 
 | Path | Shown as |
 | --- | --- |
@@ -43,7 +35,11 @@ referenced by `index.html`):
 | `assets/ios/04_travel_journal.png` | showcase (iPhone) |
 | `assets/ios/05_export.png` | Export feature |
 | `assets/ios/07_date_selector.png` | Details feature |
+| `assets/ios/06_new_journal.png` | (spare, not currently referenced) |
 | `assets/ipad/01.png` | showcase (iPad) |
 | `assets/mac/01-homepage.png` | showcase (Mac) |
+| `assets/fonts/Biorka-*.otf` | Papyr wordmark |
 
-The bundled Biorka fonts are the real, complete font files.
+The App Store screenshots are the real, full-resolution originals. They're large
+(the Mac shot is ~6 MB); if page weight matters, consider serving downscaled/WebP
+copies at the display sizes used by the frames.
