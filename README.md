@@ -40,6 +40,9 @@ No build step, no dependencies. Open `index.html` or serve the folder statically
 | `assets/mac/01-homepage.png` | showcase (Mac) |
 | `assets/fonts/Biorka-*.otf` | Papyr wordmark |
 
-The App Store screenshots are the real, full-resolution originals. They're large
-(the Mac shot is ~6 MB); if page weight matters, consider serving downscaled/WebP
-copies at the display sizes used by the frames.
+Each screenshot ships as an optimized **`.webp`** (sized to ~2× its on-screen display
+width) alongside the full-resolution **`.png`** original. `index.html` serves them via
+`<picture>`, so modern browsers fetch the small WebP (~370 KB total for all screenshots)
+and any browser without WebP support falls back to the PNG. The PNG originals are kept in
+the repo as the source of truth; regenerate the WebP copies with `scripts/gen-webp.py`
+if you replace an original.
