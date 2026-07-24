@@ -352,7 +352,9 @@ section.features { max-width: 1080px; margin: 0 auto; padding: var(--sp-20) var(
 .feature-copy { flex: 1 1 300px; min-width: 280px; }
 .feature-copy h3 { font-weight: 500; font-size: var(--fs-3xl); line-height: var(--lh-head);
   letter-spacing: -0.01em; margin: 0 0 var(--sp-4); }
-.feature-copy p { font-size: var(--fs-md); line-height: var(--lh-body); color: var(--muted); max-width: 420px; margin: 0; }
+/* :not(.mono) matters — plain .feature-copy p has higher specificity than
+   .mono alone and was overriding the eyebrow label's 11px with 18px. */
+.feature-copy p:not(.mono) { font-size: var(--fs-md); line-height: var(--lh-body); color: var(--muted); max-width: 420px; margin: 0; }
 .feature-media { flex: 1 1 260px; min-width: 250px; display: flex; justify-content: center; }
 
 /* Pull-quote / manifesto beat */
@@ -453,7 +455,7 @@ section.faq { max-width: 720px; margin: 0 auto; padding: var(--sp-10) var(--sp-6
 .howto-item p { font-size: var(--fs-base); line-height: var(--lh-body); color: var(--muted); margin: 0; max-width: 600px; }
 .contact-card { background: var(--band); border: 1px solid var(--line); border-radius: var(--r-md); padding: var(--sp-9); }
 .contact-card h2 { font-family: 'Newsreader', serif; font-weight: 500; font-size: 28px; margin: 0 0 var(--sp-3); }
-.contact-card p { font-size: var(--fs-base); line-height: var(--lh-body); color: var(--muted); margin: 0; max-width: 560px; }
+.contact-card p:not(.mono) { font-size: var(--fs-base); line-height: var(--lh-body); color: var(--muted); margin: 0; max-width: 560px; }
 
 /* ---------- 8. Footer ---------- */
 footer { background: var(--band); border-top: 1px solid var(--line); }
