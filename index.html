@@ -65,14 +65,12 @@
   .btn-pill:hover { transform: translateY(-1px); color: var(--bg); }
   @media (max-width: 639px) { nav.primary .navlink { display: none; } }
 
-  /* app store button */
-  .appstore { display: inline-flex; align-items: center; gap: 11px; background: var(--ink);
-    color: var(--bg); padding: 11px 20px; border-radius: 13px; text-decoration: none;
+  /* official App Store badge */
+  .appstore-badge { display: inline-block; line-height: 0; text-decoration: none;
     transition: transform .2s ease-out; }
-  .appstore:hover { transform: translateY(-1px); color: var(--bg); }
-  .appstore .lbl { display: flex; flex-direction: column; line-height: 1.05; text-align: left; }
-  .appstore .lbl .top { font-size: 11px; }
-  .appstore .lbl .big { font-size: 20px; font-weight: 600; font-family: 'Newsreader', serif; }
+  .appstore-badge:hover { transform: translateY(-1px); }
+  .appstore-badge img { display: block; height: 53px; width: auto; }
+  .appstore-badge.small img { height: 44px; }
 
   /* device frames */
   .frame { position: relative; background: var(--ink); }
@@ -220,9 +218,6 @@
   .footer-rule { height: 1px; background: var(--line); margin: 44px 0 24px; }
   .footer-bottom { display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; align-items: center; }
   .footer-bottom .copy { font-size: 14px; color: var(--faint); margin: 0; }
-  .appstore.small { padding: 9px 16px; border-radius: 11px; gap: 10px; }
-  .appstore.small .lbl .top { font-size: 9px; }
-  .appstore.small .lbl .big { font-size: 16px; }
 
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
@@ -260,9 +255,8 @@
         <h1>A calm, private place<br>for your words.</h1>
         <p class="lead">Papyr is a beautifully typeset journal that keeps your entries on your device — never on ours. Write, lock, and keep what matters close.</p>
         <div style="display:flex;flex-direction:column;gap:12px;align-items:flex-start;">
-          <a href="#" class="appstore" aria-label="Download Papyr on the App Store">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="#faf6ef" aria-hidden="true"><path d="M16.36 12.7c-.02-2.02 1.65-2.99 1.73-3.04-.94-1.38-2.4-1.57-2.92-1.59-1.24-.13-2.42.73-3.05.73-.63 0-1.6-.71-2.63-.69-1.35.02-2.6.79-3.29 2-1.4 2.44-.36 6.05 1.01 8.03.67.97 1.47 2.06 2.51 2.02 1.01-.04 1.39-.65 2.61-.65 1.22 0 1.56.65 2.63.63 1.09-.02 1.78-.99 2.44-1.96.77-1.12 1.09-2.21 1.11-2.27-.02-.01-2.13-.82-2.15-3.24zM14.4 6.8c.56-.68.94-1.63.84-2.58-.81.03-1.79.54-2.37 1.22-.52.6-.98 1.56-.86 2.48.9.07 1.83-.46 2.39-1.12z"/></svg>
-            <span class="lbl"><span class="top">Download on the</span><span class="big">App&nbsp;Store</span></span>
+          <a href="#" class="appstore-badge" aria-label="Download Papyr on the App Store">
+            <img src="assets/app-store-badge.svg" alt="Download on the App Store" width="160" height="53">
           </a>
           <p class="price-note">$4.99 · one-time · 7-day free trial</p>
         </div>
@@ -388,9 +382,8 @@
           <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5a7a5e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>7-day free trial, starts automatically — no card required</span></li>
           <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5a7a5e" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>Universal Purchase — iPhone, iPad &amp; Mac</span></li>
         </ul>
-        <a href="#" class="appstore" aria-label="Download Papyr on the App Store">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="#faf6ef" aria-hidden="true"><path d="M16.36 12.7c-.02-2.02 1.65-2.99 1.73-3.04-.94-1.38-2.4-1.57-2.92-1.59-1.24-.13-2.42.73-3.05.73-.63 0-1.6-.71-2.63-.69-1.35.02-2.6.79-3.29 2-1.4 2.44-.36 6.05 1.01 8.03.67.97 1.47 2.06 2.51 2.02 1.01-.04 1.39-.65 2.61-.65 1.22 0 1.56.65 2.63.63 1.09-.02 1.78-.99 2.44-1.96.77-1.12 1.09-2.21 1.11-2.27-.02-.01-2.13-.82-2.15-3.24zM14.4 6.8c.56-.68.94-1.63.84-2.58-.81.03-1.79.54-2.37 1.22-.52.6-.98 1.56-.86 2.48.9.07 1.83-.46 2.39-1.12z"/></svg>
-          <span class="lbl"><span class="top">Download on the</span><span class="big">App&nbsp;Store</span></span>
+        <a href="#" class="appstore-badge" aria-label="Download Papyr on the App Store">
+          <img src="assets/app-store-badge.svg" alt="Download on the App Store" width="160" height="53">
         </a>
       </div>
     </section>
@@ -523,9 +516,8 @@
       <div class="footer-rule"></div>
       <div class="footer-bottom">
         <p class="copy">© <span id="year">2026</span> Regent Media Group, LLC. All Rights Reserved.</p>
-        <a href="#" class="appstore small" aria-label="Download Papyr on the App Store">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="#faf6ef" aria-hidden="true"><path d="M16.36 12.7c-.02-2.02 1.65-2.99 1.73-3.04-.94-1.38-2.4-1.57-2.92-1.59-1.24-.13-2.42.73-3.05.73-.63 0-1.6-.71-2.63-.69-1.35.02-2.6.79-3.29 2-1.4 2.44-.36 6.05 1.01 8.03.67.97 1.47 2.06 2.51 2.02 1.01-.04 1.39-.65 2.61-.65 1.22 0 1.56.65 2.63.63 1.09-.02 1.78-.99 2.44-1.96.77-1.12 1.09-2.21 1.11-2.27-.02-.01-2.13-.82-2.15-3.24zM14.4 6.8c.56-.68.94-1.63.84-2.58-.81.03-1.79.54-2.37 1.22-.52.6-.98 1.56-.86 2.48.9.07 1.83-.46 2.39-1.12z"/></svg>
-          <span class="lbl"><span class="top">Download on the</span><span class="big">App&nbsp;Store</span></span>
+        <a href="#" class="appstore-badge small" aria-label="Download Papyr on the App Store">
+          <img src="assets/app-store-badge.svg" alt="Download on the App Store" width="133" height="44">
         </a>
       </div>
     </div>
