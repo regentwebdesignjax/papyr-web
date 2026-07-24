@@ -1,0 +1,74 @@
+# Netlify configuration for the Papyr marketing site.
+# Static site — no build step. Publish the repo root as-is.
+
+[build]
+  publish = "."
+  command = ""
+
+# ---------------------------------------------------------------
+# Routing
+# The site is a single document that swaps views client-side, so every
+# route has to serve index.html and let main.js pick the view from
+# location.pathname. 200 (rewrite), not 301/302 — the URL must survive.
+# ---------------------------------------------------------------
+[[redirects]]
+  from = "/support"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/terms"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/privacy"
+  to = "/index.html"
+  status = 200
+
+# ---------------------------------------------------------------
+# Caching
+# Fingerprint-free filenames, so HTML and the CSS/JS revalidate every
+# time while immutable media is cached hard.
+# ---------------------------------------------------------------
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "SAMEORIGIN"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/styles.css"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/main.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/assets/fonts/webfonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/assets/ios/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/assets/ipad/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/assets/mac/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

@@ -1,0 +1,501 @@
+@import url('assets/fonts.css');
+
+/* =============================================================
+   Papyr — design system
+   1. Tokens          5. Device frames
+   2. Base            6. Landing sections
+   3. Motion          7. Text pages
+   4. Header / nav    8. Footer
+   ============================================================= */
+
+/* ---------- 1. Tokens ---------- */
+:root {
+  /* Surface + ink */
+  --bg:          #faf6ef;
+  --bg-raised:   #ffffff;
+  --band:        #f5efe4;
+  --ink:         #2c2620;
+  --muted:       #57503f;
+  --faint:       #8a7f70;
+  --line:        #eee5d6;
+  --hair:        #f0e9dd;
+
+  /* Brand */
+  --accent:      #9c4a2f;
+  --accent-dark: #7d3a24;
+  --accent-soft: rgba(156, 74, 47, 0.15);
+  --green:       #5a7a5e;
+
+  /* Device hardware */
+  --device-1:    #3a322a;
+  --device-2:    #221d18;
+  --device-edge: rgba(255, 250, 240, 0.16);
+
+  /* Type scale */
+  --fs-2xs: 11px;  --fs-xs:  12px;  --fs-sm:  14px;
+  --fs-base:17px;  --fs-md:  18px;  --fs-lg:  19px;
+  --fs-xl:  21px;  --fs-2xl: 25px;  --fs-3xl: 32px;
+  --fs-display: clamp(46px, 6vw, 64px);
+  --fs-h1:  clamp(38px, 7vw, 58px);
+  --fs-h2:  clamp(30px, 5vw, 40px);
+  --fs-h2-lg: clamp(32px, 5.5vw, 44px);
+
+  --lh-tight: 1.08;  --lh-head: 1.15;  --lh-body: 1.6;
+  --measure: 62ch;
+
+  /* Space scale (4px base) */
+  --sp-1: 4px;   --sp-2: 8px;   --sp-3: 12px;  --sp-4: 16px;
+  --sp-5: 20px;  --sp-6: 24px;  --sp-7: 28px;  --sp-8: 32px;
+  --sp-9: 36px;  --sp-10: 40px; --sp-11: 44px; --sp-12: 48px;
+  --sp-14: 56px; --sp-16: 64px; --sp-20: 80px; --sp-24: 96px;
+  --sp-28: 112px;
+
+  /* Radius */
+  --r-sm: 8px;  --r-md: 14px;  --r-lg: 18px;  --r-xl: 24px;  --r-pill: 999px;
+
+  /* Elevation — warm-tinted, layered (ambient + contact) */
+  --sh-sm: 0 1px 2px rgba(60,45,30,.06), 0 1px 1px rgba(60,45,30,.04);
+  --sh-md: 0 4px 12px -2px rgba(60,45,30,.10), 0 2px 4px rgba(60,45,30,.06);
+  --sh-lg: 0 16px 32px -12px rgba(60,45,30,.18), 0 4px 10px rgba(60,45,30,.08);
+  --sh-xl: 0 40px 70px -24px rgba(60,45,30,.42), 0 12px 24px -8px rgba(60,45,30,.20);
+
+  /* Motion */
+  --ease: cubic-bezier(.22, .61, .36, 1);
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+
+  --header-h: 66px;
+  color-scheme: light;
+}
+
+/* Warm dark theme — suits a bedside journaling app */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:          #14110e;
+    --bg-raised:   #1d1915;
+    --band:        #1a1613;
+    --ink:         #f3ede2;
+    --muted:       #bcb3a3;
+    --faint:       #8d8474;
+    --line:        #2e2822;
+    --hair:        #29231d;
+
+    --accent:      #d97e57;
+    --accent-dark: #e89a78;
+    --accent-soft: rgba(217, 126, 87, 0.18);
+    --green:       #86a98a;
+
+    --device-1:    #2a241e;
+    --device-2:    #100d0b;
+
+    --sh-sm: 0 1px 2px rgba(0,0,0,.34);
+    --sh-md: 0 4px 12px -2px rgba(0,0,0,.44), 0 2px 4px rgba(0,0,0,.30);
+    --sh-lg: 0 16px 32px -12px rgba(0,0,0,.56), 0 4px 10px rgba(0,0,0,.34);
+    --sh-xl: 0 40px 70px -24px rgba(0,0,0,.72), 0 12px 24px -8px rgba(0,0,0,.46);
+
+    color-scheme: dark;
+  }
+}
+
+/* ---------- 2. Base ---------- */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Alegreya Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: var(--fs-md);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+a { color: var(--accent); }
+a:hover { color: var(--accent-dark); }
+::selection { background: var(--accent-soft); }
+/* height:auto is required, not cosmetic: the width/height attributes on the
+   screenshots are presentational hints, and a CSS `width` alone does not
+   override the hinted height — without this every screenshot renders at its
+   full intrinsic height. */
+img { max-width: 100%; height: auto; }
+picture { display: block; }
+
+/* Visible focus everywhere — a11y is part of feeling well-built */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: var(--sp-1);
+}
+
+.skip-link {
+  position: absolute; left: var(--sp-4); top: calc(var(--sp-4) * -4);
+  z-index: 200; padding: var(--sp-3) var(--sp-5);
+  background: var(--accent); color: #fff; border-radius: var(--r-pill);
+  text-decoration: none; font-size: var(--fs-base);
+  transition: top .2s var(--ease);
+}
+.skip-link:focus { top: var(--sp-4); color: #fff; }
+
+h1, h2, h3 {
+  font-family: 'Newsreader', serif;
+  font-optical-sizing: auto;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.mono {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: var(--fs-2xs); font-weight: 600;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--faint);
+}
+.serif { font-family: 'Newsreader', serif; }
+.wordmark { font-family: 'Biorka', serif; font-weight: 600; letter-spacing: -0.01em; }
+
+/* Grain: sits *behind* content so it never muddies type. */
+.grain {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  opacity: .5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+}
+/* Lift content above the grain layer. The header is deliberately excluded —
+   it sets its own position:fixed / z-index:50, and this selector is more
+   specific, so including it here would silently unfix the header. */
+body > main, body > footer { position: relative; z-index: 1; }
+
+/* Paper texture for the cream bands.
+   The tile is centred on mid-grey, so soft-light leaves the base colour alone
+   and only modulates around it — multiply would just dull the cream to grey. */
+.papered { position: relative; isolation: isolate; }
+.papered::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background-image: url('assets/paper-texture.webp');
+  background-size: 256px 256px;
+  opacity: .55; mix-blend-mode: soft-light;
+}
+@media (prefers-color-scheme: dark) {
+  .papered::before { opacity: .3; }
+}
+
+/* ---------- 3. Motion ---------- */
+.js .reveal { animation: omReveal .7s var(--ease-out) both; }
+@keyframes omReveal { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+
+/* Directional scroll reveals; stagger via inline --d.
+   Scoped to .js so the starting opacity:0 only ever applies when the script
+   that removes it is actually running — without JS the content stays visible
+   instead of being permanently invisible. */
+.js .io { opacity: 0; transform: translateY(20px); }
+.js .io.from-l { transform: translate3d(-28px, 0, 0); }
+.js .io.from-r { transform: translate3d(28px, 0, 0); }
+.js .io.seen {
+  opacity: 1; transform: none;
+  transition: opacity .7s var(--ease-out), transform .7s var(--ease-out);
+  transition-delay: var(--d, 0ms);
+}
+
+/* ---------- 4. Header / nav ---------- */
+header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--sp-3) var(--sp-6);
+  background: transparent; border-bottom: 1px solid transparent;
+  transition: background .25s var(--ease), border-color .25s var(--ease);
+}
+header.solid {
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  backdrop-filter: blur(12px) saturate(1.4);
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  border-bottom: 1px solid var(--line);
+}
+
+.brand { display: inline-flex; align-items: center; gap: var(--sp-3); text-decoration: none; color: var(--ink); }
+.brand img { width: 28px; height: 28px; border-radius: var(--sp-2); box-shadow: var(--sh-sm); }
+.brand span { font-size: 22px; }
+
+nav.primary { display: flex; align-items: center; gap: var(--sp-7); }
+nav.primary a.navlink {
+  font-size: 16px; color: var(--muted); text-decoration: none;
+  position: relative; transition: color .2s var(--ease);
+}
+nav.primary a.navlink::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -5px; height: 1px;
+  background: var(--accent); transform: scaleX(0); transform-origin: left;
+  transition: transform .28s var(--ease-out);
+}
+nav.primary a.navlink:hover { color: var(--ink); }
+nav.primary a.navlink:hover::after { transform: scaleX(1); }
+
+.btn-pill {
+  display: inline-flex; align-items: center; background: var(--accent); color: #fff;
+  font-family: 'Newsreader', serif; font-weight: 500; font-size: 16px;
+  padding: var(--sp-2) var(--sp-5); border-radius: var(--r-pill); text-decoration: none;
+  box-shadow: 0 5px 16px color-mix(in srgb, var(--accent) 32%, transparent);
+  transition: transform .2s var(--ease), box-shadow .2s var(--ease);
+}
+.btn-pill:hover {
+  transform: translateY(-1px); color: #fff;
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+/* Mobile menu */
+.nav-toggle {
+  display: none; width: 42px; height: 42px; padding: 0;
+  align-items: center; justify-content: center;
+  background: none; border: 1px solid var(--line); border-radius: var(--r-pill);
+  cursor: pointer; color: var(--ink);
+}
+.nav-toggle span { display: block; width: 17px; height: 1.5px; background: currentColor; border-radius: 2px;
+  transition: transform .28s var(--ease-out), opacity .2s var(--ease); }
+.nav-toggle span + span { margin-top: 4.5px; }
+body.nav-open .nav-toggle span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+body.nav-open .nav-toggle span:nth-child(2) { opacity: 0; }
+body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+@media (max-width: 719px) {
+  .nav-toggle { display: inline-flex; }
+  nav.primary {
+    position: fixed; inset: var(--header-h) 0 auto 0;
+    flex-direction: column; align-items: stretch; gap: 0;
+    padding: var(--sp-2) var(--sp-6) var(--sp-8);
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    box-shadow: var(--sh-lg);
+    transform: translateY(-8px); opacity: 0; visibility: hidden;
+    transition: opacity .24s var(--ease), transform .24s var(--ease-out), visibility .24s;
+  }
+  body.nav-open nav.primary { transform: none; opacity: 1; visibility: visible; }
+  nav.primary a.navlink {
+    font-family: 'Newsreader', serif; font-size: var(--fs-xl);
+    padding: var(--sp-4) 0; border-bottom: 1px solid var(--hair); color: var(--ink);
+  }
+  nav.primary a.navlink::after { display: none; }
+  nav.primary .btn-pill { justify-content: center; margin-top: var(--sp-6); padding: var(--sp-3) var(--sp-5); }
+}
+
+/* App Store badge */
+.appstore-badge { display: inline-block; line-height: 0; text-decoration: none; transition: transform .2s var(--ease); }
+.appstore-badge:hover { transform: translateY(-1px); }
+.appstore-badge img { display: block; height: 53px; width: auto; }
+.appstore-badge.small img { height: 44px; }
+
+/* ---------- 5. Device frames ---------- */
+/* Hardware is drawn rather than flat-filled: a metal-ish gradient body, a
+   bright top edge, an inset screen well, and layered ambient+contact shadow. */
+.frame {
+  position: relative;
+  background: linear-gradient(160deg, var(--device-1), var(--device-2) 62%);
+  box-shadow: var(--sh-xl);
+  isolation: isolate;
+}
+.frame::after { /* hairline highlight along the top bezel */
+  content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  border: 1px solid var(--device-edge);
+  -webkit-mask-image: linear-gradient(#000, transparent 55%);
+  mask-image: linear-gradient(#000, transparent 55%);
+}
+.frame .screen {
+  position: relative; overflow: hidden;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.55), inset 0 2px 10px rgba(0,0,0,.30);
+}
+.frame .screen img { display: block; width: 100%; }
+
+.frame.phone { width: 290px; padding: 11px; border-radius: 46px; }
+.frame.phone .screen { border-radius: 36px; }
+.frame.phone.sm { width: 250px; padding: 9px; border-radius: 40px; box-shadow: var(--sh-lg); }
+.frame.phone.sm .screen { border-radius: 31px; }
+
+
+.tablet { position: relative; width: 220px; padding: 9px; border-radius: 26px;
+  background: linear-gradient(160deg, var(--device-1), var(--device-2) 62%); box-shadow: var(--sh-lg); }
+.tablet .screen { border-radius: 18px; overflow: hidden; box-shadow: inset 0 0 0 1px rgba(0,0,0,.55); }
+.tablet img { display: block; width: 100%; }
+
+.mini { position: relative; width: 150px; padding: 7px; border-radius: 30px;
+  background: linear-gradient(160deg, var(--device-1), var(--device-2) 62%); box-shadow: var(--sh-lg); }
+.mini .screen { border-radius: 24px; overflow: hidden; box-shadow: inset 0 0 0 1px rgba(0,0,0,.55); }
+.mini img { display: block; width: 100%; }
+
+/* Mac: lid + chin + stand */
+.mac { position: relative; width: 560px; max-width: 100%; }
+.mac .lid {
+  padding: 14px 14px 0; border-radius: 16px 16px 0 0;
+  background: linear-gradient(160deg, var(--device-1), var(--device-2) 62%);
+  box-shadow: var(--sh-xl);
+}
+.mac .screen { border-radius: 5px 5px 0 0; overflow: hidden; box-shadow: inset 0 0 0 1px rgba(0,0,0,.55); }
+.mac img { display: block; width: 100%; }
+.mac .chin {
+  height: 16px; border-radius: 0 0 3px 3px;
+  background: linear-gradient(180deg, var(--device-2), var(--device-1));
+  box-shadow: inset 0 1px 0 rgba(255,250,240,.10);
+}
+.mac .foot { /* the desk-contact shadow that sells it as sitting on a surface */
+  height: 10px; margin: 0 auto; width: 78%;
+  background: radial-gradient(ellipse at center, rgba(60,45,30,.28), transparent 72%);
+}
+@media (prefers-color-scheme: dark) {
+  .mac .foot { background: radial-gradient(ellipse at center, rgba(0,0,0,.6), transparent 72%); }
+}
+
+/* ---------- 6. Landing sections ---------- */
+/* Directional reveals start offset horizontally; clip that axis so the
+   pre-reveal offset can't widen the page. `clip` (not `hidden`) leaves the
+   vertical axis alone, so nothing becomes a scroll container. */
+main { display: block; overflow-x: clip; }
+.page { display: none; }
+.page.active { display: block; }
+
+.section-head { text-align: center; margin-bottom: var(--sp-16); }
+.section-head h2, .band h2, .showcase h2, .pricing-head h2, .faq-head h2 {
+  font-weight: 500; font-size: var(--fs-h2); margin: 0;
+}
+.eyebrow { margin: 0 0 var(--sp-4); }
+
+section.hero {
+  max-width: 1120px; margin: 0 auto;
+  padding: 150px var(--sp-6) var(--sp-16);
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--sp-12); align-items: center;
+}
+.hero h1 { font-weight: 500; font-size: var(--fs-h1); line-height: var(--lh-tight); margin: 0 0 var(--sp-5); }
+.hero p.lead { font-size: 20px; line-height: 1.55; color: var(--muted); max-width: 480px; margin: 0 0 var(--sp-8); }
+.price-note { font-family: 'IBM Plex Mono', monospace; font-size: var(--fs-xs); color: var(--faint); margin: 0; }
+@media (max-width: 719px) { section.hero { padding-top: 116px; } }
+
+section.features { max-width: 1080px; margin: 0 auto; padding: var(--sp-20) var(--sp-6) var(--sp-10); }
+.feature-row { display: flex; gap: var(--sp-14); align-items: center; margin-bottom: var(--sp-24); flex-wrap: wrap; }
+.feature-row.rev { flex-direction: row-reverse; }
+.feature-copy { flex: 1 1 300px; min-width: 280px; }
+.feature-copy h3 { font-weight: 500; font-size: var(--fs-3xl); line-height: var(--lh-head);
+  letter-spacing: -0.01em; margin: 0 0 var(--sp-4); }
+.feature-copy p { font-size: var(--fs-md); line-height: var(--lh-body); color: var(--muted); max-width: 420px; margin: 0; }
+.feature-media { flex: 1 1 260px; min-width: 250px; display: flex; justify-content: center; }
+
+/* Pull-quote / manifesto beat */
+.manifesto { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--band); }
+.manifesto-inner { max-width: 860px; margin: 0 auto; padding: var(--sp-24) var(--sp-6); text-align: center; }
+.manifesto blockquote {
+  margin: 0; font-family: 'Newsreader', serif; font-style: italic; font-weight: 400;
+  font-size: clamp(26px, 3.6vw, 38px); line-height: 1.32; letter-spacing: -0.015em;
+  color: var(--ink); text-wrap: balance;
+}
+.manifesto .attrib { margin: var(--sp-6) 0 0; }
+
+section.band { background: var(--band); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.band-inner { max-width: 1000px; margin: 0 auto; padding: var(--sp-24) var(--sp-6); text-align: center; }
+.band h2 { line-height: 1.14; margin: 0 auto var(--sp-3); max-width: 680px; font-size: var(--fs-h2-lg); }
+.band .sub { font-size: var(--fs-lg); color: var(--muted); max-width: 600px; margin: 0 auto var(--sp-14); }
+.privacy-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--sp-5); text-align: left; }
+.privacy-card {
+  background: var(--bg-raised); border: 1px solid var(--line); border-radius: var(--r-md);
+  padding: var(--sp-7); box-shadow: var(--sh-sm);
+  transition: transform .3s var(--ease-out), box-shadow .3s var(--ease-out);
+}
+.privacy-card:hover { transform: translateY(-3px); box-shadow: var(--sh-md); }
+.privacy-card svg { margin-bottom: var(--sp-4); }
+.privacy-card h3 { font-weight: 500; font-size: var(--fs-xl); margin: 0 0 var(--sp-2); letter-spacing: -0.01em; }
+.privacy-card p { font-size: 16px; line-height: 1.55; color: var(--muted); margin: 0; }
+
+section.showcase { max-width: 1120px; margin: 0 auto; padding: var(--sp-24) var(--sp-6) var(--sp-10); text-align: center; }
+.showcase h2 { margin: 0 auto var(--sp-3); max-width: 620px; }
+.showcase .sub { font-size: var(--fs-lg); color: var(--muted); max-width: 560px; margin: 0 auto var(--sp-16); }
+.showcase-devices { display: flex; align-items: flex-end; justify-content: center; gap: var(--sp-9); flex-wrap: wrap; }
+.pair { display: flex; align-items: flex-end; gap: var(--sp-6); flex-wrap: wrap; justify-content: center; }
+@media (max-width: 480px) {
+  .showcase-devices { gap: var(--sp-6); }
+  .pair { gap: var(--sp-4); }
+  .tablet { width: 190px; } .mini { width: 120px; }
+}
+
+section.pricing { max-width: 1080px; margin: 0 auto; padding: var(--sp-24) var(--sp-6); }
+.pricing-head { text-align: center; margin-bottom: var(--sp-11); }
+.price-card {
+  max-width: 420px; margin: 0 auto; background: var(--bg-raised);
+  border: 1px solid var(--line); border-radius: var(--r-lg);
+  padding: var(--sp-11) var(--sp-10); text-align: center; box-shadow: var(--sh-lg);
+}
+.price-card .tier { font-family: 'IBM Plex Mono', monospace; font-size: var(--fs-2xs); font-weight: 600;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin: 0 0 var(--sp-5); }
+.price-card .amount { font-family: 'Newsreader', serif; font-weight: 500; font-size: var(--fs-display); line-height: 1; letter-spacing: -0.02em; }
+.price-card .once { font-family: 'IBM Plex Mono', monospace; font-size: var(--fs-xs); color: var(--faint); margin: 0 0 var(--sp-7); }
+.price-card .rule { height: 1px; background: var(--hair); margin: 0 0 var(--sp-6); }
+.price-card ul { list-style: none; padding: 0; margin: 0 0 var(--sp-8); text-align: left; display: flex; flex-direction: column; gap: var(--sp-3); }
+.price-card li { display: flex; gap: var(--sp-3); align-items: flex-start; color: var(--muted); font-size: var(--fs-base); }
+.price-card li svg { flex-shrink: 0; margin-top: 2px; }
+
+section.faq { max-width: 720px; margin: 0 auto; padding: var(--sp-10) var(--sp-6) var(--sp-24); }
+.faq-head { text-align: center; margin-bottom: var(--sp-11); }
+.faq-list { display: flex; flex-direction: column; border-top: 1px solid var(--hair); }
+.faq-item { border-bottom: 1px solid var(--hair); }
+.faq-q {
+  width: 100%; display: flex; align-items: center; justify-content: space-between; gap: var(--sp-4);
+  background: none; border: none; cursor: pointer; padding: var(--sp-5) var(--sp-1); text-align: left;
+  font-family: 'Newsreader', serif; font-weight: 500; font-size: 20px; color: var(--ink);
+  transition: color .2s var(--ease);
+}
+.faq-q:hover { color: var(--accent); }
+.faq-q .icon { flex-shrink: 0; font-family: 'Newsreader', serif; font-size: 26px; font-weight: 400;
+  color: var(--accent); line-height: 1; transition: transform .26s var(--ease-out); }
+.faq-item.open .faq-q .icon { transform: rotate(45deg); }
+/* Height-agnostic: JS sets --h from scrollHeight so long answers never clip. */
+.faq-a { overflow: hidden; height: 0; opacity: 0; transition: height .3s var(--ease-out), opacity .24s var(--ease); }
+.faq-item.open .faq-a { height: var(--h, auto); opacity: 1; }
+.faq-a p { margin: 0; padding: 0 var(--sp-1) var(--sp-6); font-size: var(--fs-base); line-height: var(--lh-body); color: var(--muted); max-width: 620px; }
+
+/* ---------- 7. Text pages ---------- */
+.textpage { padding-top: var(--sp-24); }
+.textpage section { max-width: 720px; margin: 0 auto; padding: var(--sp-14) var(--sp-6) var(--sp-24); }
+.textpage.legal section { max-width: 680px; }
+.textpage h1 { font-weight: 500; margin: 0 0 var(--sp-5); }
+.support h1 { font-size: clamp(36px, 6.5vw, 52px); }
+.legal h1 { font-size: clamp(34px, 6vw, 48px); margin-bottom: var(--sp-3); }
+.textpage .intro { font-size: var(--fs-lg); line-height: var(--lh-body); color: var(--muted); margin: 0; }
+.effective { font-family: 'IBM Plex Mono', monospace; font-size: var(--fs-xs); color: var(--faint); margin: 0 0 var(--sp-4); }
+.legal .lead { font-size: var(--fs-base); line-height: 1.65; color: var(--muted); margin: 0 0 var(--sp-11); }
+.legal .block { margin-bottom: var(--sp-10); }
+.legal .block h2 { font-weight: 600; font-size: var(--fs-2xl); letter-spacing: -0.01em; margin: 0 0 var(--sp-3); }
+.legal .block p { font-size: var(--fs-base); line-height: 1.65; color: var(--muted); margin: 0; }
+
+.howto-head { margin-bottom: var(--sp-6); }
+.howto { display: flex; flex-direction: column; gap: var(--sp-8); }
+.howto-item { display: flex; gap: var(--sp-5); align-items: flex-start; }
+.howto-num {
+  flex-shrink: 0; width: 34px; height: 34px; border-radius: var(--r-pill);
+  background: var(--accent-soft); color: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Newsreader', serif; font-weight: 600; font-size: var(--fs-base);
+}
+.howto-item h3 { font-weight: 500; font-size: 22px; margin: 2px 0 var(--sp-2); letter-spacing: -0.01em; }
+.howto-item p { font-size: var(--fs-base); line-height: var(--lh-body); color: var(--muted); margin: 0; max-width: 600px; }
+.contact-card { background: var(--band); border: 1px solid var(--line); border-radius: var(--r-md); padding: var(--sp-9); }
+.contact-card h2 { font-family: 'Newsreader', serif; font-weight: 500; font-size: 28px; margin: 0 0 var(--sp-3); }
+.contact-card p { font-size: var(--fs-base); line-height: var(--lh-body); color: var(--muted); margin: 0; max-width: 560px; }
+
+/* ---------- 8. Footer ---------- */
+footer { background: var(--band); border-top: 1px solid var(--line); }
+.footer-inner { max-width: 1080px; margin: 0 auto; padding: var(--sp-16) var(--sp-6) var(--sp-10); }
+.footer-top { display: flex; flex-wrap: wrap; gap: var(--sp-10); justify-content: space-between; align-items: flex-start; }
+.footer-brand { max-width: 340px; }
+.footer-brand .brand { margin-bottom: var(--sp-4); }
+.footer-brand .brand img { width: 26px; height: 26px; border-radius: var(--sp-2); box-shadow: none; }
+.footer-brand .brand span { font-size: 20px; }
+.footer-brand .tag { font-family: 'Newsreader', serif; font-style: italic; font-size: var(--fs-md); line-height: 1.5; color: var(--muted); margin: 0; }
+.footer-cols { display: flex; gap: var(--sp-14); flex-wrap: wrap; }
+.footer-col { display: flex; flex-direction: column; gap: var(--sp-3); }
+.footer-col .head { font-family: 'IBM Plex Mono', monospace; font-size: var(--fs-2xs); font-weight: 600;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--faint); margin: 0 0 2px; }
+.footer-col a { font-size: 16px; color: var(--muted); text-decoration: none; transition: color .2s var(--ease); }
+.footer-col a:hover { color: var(--ink); }
+.footer-rule { height: 1px; background: var(--line); margin: var(--sp-11) 0 var(--sp-6); }
+.footer-bottom { display: flex; flex-wrap: wrap; gap: var(--sp-4); justify-content: space-between; align-items: center; }
+.footer-bottom .copy { font-size: var(--fs-sm); color: var(--faint); margin: 0; }
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .js .io { opacity: 1; transform: none; }
+  .faq-item.open .faq-a { height: auto; }
+}
