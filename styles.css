@@ -226,7 +226,7 @@ nav.primary a.navlink:hover::after { transform: scaleX(1); }
 
 /* Mobile menu */
 .nav-toggle {
-  display: none; width: 42px; height: 42px; padding: 0;
+  display: none; flex-direction: column; width: 42px; height: 42px; padding: 0;
   align-items: center; justify-content: center;
   background: none; border: 1px solid var(--line); border-radius: var(--r-pill);
   cursor: pointer; color: var(--ink);
