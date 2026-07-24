@@ -1,5 +1,22 @@
 @import url('assets/fonts.css');
 
+/* Biorka (wordmark only) is a local font, not part of the Google Fonts set
+   that assets/fonts.css is generated from — it must be declared here. */
+@font-face {
+  font-family: 'Biorka';
+  src: url('assets/fonts/Biorka-Regular.otf') format('opentype');
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Biorka';
+  src: url('assets/fonts/Biorka-Italic.otf') format('opentype');
+  font-weight: 400 600;
+  font-style: italic;
+  font-display: swap;
+}
+
 /* =============================================================
    Papyr — design system
    1. Tokens          5. Device frames
@@ -65,35 +82,6 @@
 
   --header-h: 66px;
   color-scheme: light;
-}
-
-/* Warm dark theme — suits a bedside journaling app */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg:          #14110e;
-    --bg-raised:   #1d1915;
-    --band:        #1a1613;
-    --ink:         #f3ede2;
-    --muted:       #bcb3a3;
-    --faint:       #8d8474;
-    --line:        #2e2822;
-    --hair:        #29231d;
-
-    --accent:      #d97e57;
-    --accent-dark: #e89a78;
-    --accent-soft: rgba(217, 126, 87, 0.18);
-    --green:       #86a98a;
-
-    --device-1:    #2a241e;
-    --device-2:    #100d0b;
-
-    --sh-sm: 0 1px 2px rgba(0,0,0,.34);
-    --sh-md: 0 4px 12px -2px rgba(0,0,0,.44), 0 2px 4px rgba(0,0,0,.30);
-    --sh-lg: 0 16px 32px -12px rgba(0,0,0,.56), 0 4px 10px rgba(0,0,0,.34);
-    --sh-xl: 0 40px 70px -24px rgba(0,0,0,.72), 0 12px 24px -8px rgba(0,0,0,.46);
-
-    color-scheme: dark;
-  }
 }
 
 /* ---------- 2. Base ---------- */
@@ -173,9 +161,6 @@ body > main, body > footer { position: relative; z-index: 1; }
   background-image: url('assets/paper-texture.webp');
   background-size: 256px 256px;
   opacity: .55; mix-blend-mode: soft-light;
-}
-@media (prefers-color-scheme: dark) {
-  .papered::before { opacity: .3; }
 }
 
 /* ---------- 3. Motion ---------- */
@@ -334,9 +319,6 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-6px) rotate
 .mac .foot { /* the desk-contact shadow that sells it as sitting on a surface */
   height: 10px; margin: 0 auto; width: 78%;
   background: radial-gradient(ellipse at center, rgba(60,45,30,.28), transparent 72%);
-}
-@media (prefers-color-scheme: dark) {
-  .mac .foot { background: radial-gradient(ellipse at center, rgba(0,0,0,.6), transparent 72%); }
 }
 
 /* ---------- 6. Landing sections ---------- */
