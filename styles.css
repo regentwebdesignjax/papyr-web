@@ -531,8 +531,16 @@ footer { background: var(--band); border-top: 1px solid var(--line); }
   background:
     linear-gradient(100deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 82%, transparent) 34%, color-mix(in srgb, var(--bg) 22%, transparent) 62%, transparent 88%),
     linear-gradient(to top, color-mix(in srgb, var(--bg) 78%, transparent), transparent 38%),
-    /* keeps the transparent header's nav legible where the photo is busiest */
-    linear-gradient(to bottom, color-mix(in srgb, var(--bg) 72%, transparent), transparent calc(var(--header-h) + 28px));
+    /* Keeps the transparent header's nav legible over the photo. Measured
+       contrast against --muted was as low as 2.0:1 (WCAG AA needs 4.5:1) with
+       the previous, weaker version of this gradient — it faded out well
+       before the header's own text baseline. This one stays near-opaque for
+       the full header height, then clears over the next 100px so the hero
+       photo still reads normally just below the chrome. */
+    linear-gradient(to bottom,
+      color-mix(in srgb, var(--bg) 94%, transparent) 0,
+      color-mix(in srgb, var(--bg) 90%, transparent) var(--header-h),
+      transparent calc(var(--header-h) + 100px));
 }
 
 .hero-body { position: relative; z-index: 1; max-width: 1240px; margin: 0 auto; width: 100%; align-self: center; }
@@ -556,8 +564,18 @@ footer { background: var(--band); border-top: 1px solid var(--line); }
 
 @media (max-width: 719px) {
   .hero-x { padding-top: calc(var(--header-h) + var(--sp-8)); }
-  .hero-scrim { background:
-      linear-gradient(to top, var(--bg) 18%, color-mix(in srgb, var(--bg) 76%, transparent) 52%, color-mix(in srgb, var(--bg) 30%, transparent)); }
+  .hero-scrim {
+    /* This used to replace the whole background and drop the header-band
+       layer entirely, leaving the menu icon sitting on the raw photo with a
+       measured ~1:1 icon/background contrast at some scroll positions. Keep
+       that layer here too. */
+    background:
+      linear-gradient(to top, var(--bg) 18%, color-mix(in srgb, var(--bg) 76%, transparent) 52%, color-mix(in srgb, var(--bg) 30%, transparent)),
+      linear-gradient(to bottom,
+        color-mix(in srgb, var(--bg) 94%, transparent) 0,
+        color-mix(in srgb, var(--bg) 90%, transparent) var(--header-h),
+        transparent calc(var(--header-h) + 100px));
+  }
   .hero-foot .mono { display: none; }
 }
 
