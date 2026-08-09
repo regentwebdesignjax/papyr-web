@@ -483,3 +483,187 @@ footer { background: var(--band); border-top: 1px solid var(--line); }
   .js .io { opacity: 1; transform: none; }
   .faq-item.open .faq-a { height: auto; }
 }
+
+/* =============================================================
+   9. Redesign — cinematic landing
+   Hero shader stage, pinned feature rail, redaction moment,
+   parallax showcase. Everything motion-related is gated behind
+   .js and neutralised under prefers-reduced-motion at the end.
+   ============================================================= */
+
+:root {
+  --fs-hero: clamp(42px, 8.4vw, 124px);
+  --fs-sect: clamp(32px, 4.6vw, 68px);
+  --rail-gap: clamp(40px, 6vw, 120px);
+}
+
+/* ---------- split-text primitives ---------- */
+/* SplitText builds .sx-line wrappers; the mask hides the pre-reveal offset. */
+.sx-mask { overflow: hidden; display: block; }
+.js [data-split]:not(.is-split),
+.js [data-split-words]:not(.is-split) { opacity: 0; }
+.is-split { opacity: 1; }
+
+/* ---------- 00 · hero ---------- */
+.hero-x {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  padding: calc(var(--header-h) + var(--sp-10)) var(--sp-6) var(--sp-8);
+  overflow: clip;
+}
+.hero-stage { position: absolute; inset: 0; z-index: 0; }
+.hero-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: none; }
+.hero-canvas.is-live { display: block; }
+.hero-canvas.is-live ~ .hero-fallback { opacity: 0; }
+
+.hero-fallback { position: absolute; inset: 0; transition: opacity .6s var(--ease); }
+.hero-fallback .hf {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; object-fit: cover; object-position: center;
+}
+/* Without the shader the two photos simply cross-fade on scroll (JS sets --t). */
+.hero-fallback .hf-b { opacity: var(--t, 0); }
+
+.hero-scrim {
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(100deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 82%, transparent) 34%, color-mix(in srgb, var(--bg) 22%, transparent) 62%, transparent 88%),
+    linear-gradient(to top, color-mix(in srgb, var(--bg) 78%, transparent), transparent 38%),
+    /* keeps the transparent header's nav legible where the photo is busiest */
+    linear-gradient(to bottom, color-mix(in srgb, var(--bg) 72%, transparent), transparent calc(var(--header-h) + 28px));
+}
+
+.hero-body { position: relative; z-index: 1; max-width: 1240px; margin: 0 auto; width: 100%; align-self: center; }
+.hero-eyebrow { margin: 0 0 var(--sp-6); }
+.hero-title {
+  font-family: 'Newsreader', serif; font-weight: 500;
+  font-size: var(--fs-hero); line-height: .96; letter-spacing: -0.035em;
+  margin: 0 0 var(--sp-6); max-width: 15ch;
+}
+.hero-lead { font-size: clamp(17px, 1.5vw, 21px); line-height: 1.5; color: var(--muted); max-width: 46ch; margin: 0 0 var(--sp-8); }
+.hero-cta { display: flex; flex-direction: column; gap: var(--sp-3); align-items: flex-start; }
+
+.hero-foot {
+  position: relative; z-index: 1;
+  max-width: 1240px; margin: 0 auto; width: 100%;
+  display: flex; align-items: center; justify-content: space-between; gap: var(--sp-4);
+}
+.scroll-cue { display: block; width: 1px; height: 46px; background: var(--line); position: relative; overflow: hidden; }
+.scroll-cue i { position: absolute; inset: 0; background: var(--accent); transform-origin: top; animation: cue 2.2s var(--ease) infinite; }
+@keyframes cue { 0% { transform: scaleY(0); transform-origin: top; } 45% { transform: scaleY(1); transform-origin: top; } 55% { transform: scaleY(1); transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
+
+@media (max-width: 719px) {
+  .hero-x { padding-top: calc(var(--header-h) + var(--sp-8)); }
+  .hero-scrim { background:
+      linear-gradient(to top, var(--bg) 18%, color-mix(in srgb, var(--bg) 76%, transparent) 52%, color-mix(in srgb, var(--bg) 30%, transparent)); }
+  .hero-foot .mono { display: none; }
+}
+
+/* ---------- 01 · pinned feature rail ---------- */
+.rail { position: relative; padding: var(--sp-24) 0 var(--sp-20); }
+.rail-head { max-width: 1240px; margin: 0 auto var(--sp-16); padding: 0 var(--sp-6); }
+.rail-title { font-weight: 500; font-size: var(--fs-sect); line-height: 1.02; letter-spacing: -0.03em; margin: 0; max-width: 16ch; }
+
+.rail-viewport { overflow: clip; }
+.rail-track { display: flex; gap: var(--rail-gap); padding: 0 var(--sp-6); will-change: transform; }
+
+.panel {
+  flex: 0 0 auto;
+  width: min(74vw, 660px);
+  display: grid; grid-template-columns: 1fr auto; gap: var(--sp-8);
+  align-items: center;
+}
+.panel-copy { position: relative; }
+.panel-num {
+  display: block; color: var(--accent); margin-bottom: var(--sp-5);
+  font-size: var(--fs-2xs);
+}
+.panel-copy h3 {
+  font-weight: 500; font-size: clamp(26px, 2.6vw, 40px); line-height: 1.08;
+  letter-spacing: -0.02em; margin: 0 0 var(--sp-4);
+}
+.panel-copy p { font-size: var(--fs-base); line-height: var(--lh-body); color: var(--muted); margin: 0; max-width: 34ch; }
+.panel-media { display: flex; justify-content: center; }
+
+.rail-progress { max-width: 1240px; margin: var(--sp-14) auto 0; padding: 0 var(--sp-6); }
+.rail-progress i { display: block; height: 1px; background: var(--line); position: relative; }
+.rail-progress i::after {
+  content: ''; position: absolute; left: 0; top: 0; height: 1px; width: 100%;
+  background: var(--accent); transform: scaleX(var(--p, 0)); transform-origin: left;
+}
+
+/* Below the pin breakpoint the rail becomes an ordinary stack. */
+@media (max-width: 899px) {
+  .rail-track { flex-direction: column; gap: var(--sp-20); padding: 0 var(--sp-6); }
+  .panel { width: 100%; grid-template-columns: 1fr; gap: var(--sp-8); }
+  .panel-media { justify-content: flex-start; }
+  .rail-progress { display: none; }
+}
+
+/* ---------- 02 · manifesto ---------- */
+.manifesto .manifesto-inner { padding-block: var(--sp-28); }
+.manifesto blockquote {
+  font-size: clamp(26px, 4vw, 56px); line-height: 1.16; letter-spacing: -0.025em;
+  max-width: 18ch; margin-inline: auto;
+}
+.manifesto .eyebrow { margin-bottom: var(--sp-8); }
+
+/* ---------- 03 · privacy + redaction ---------- */
+.privacy-x { max-width: 1240px; margin: 0 auto; padding: var(--sp-28) var(--sp-6); }
+.privacy-head { max-width: 46ch; margin-bottom: var(--sp-16); }
+.privacy-head h2 { font-weight: 500; font-size: var(--fs-sect); line-height: 1.04; letter-spacing: -0.03em; margin: 0 0 var(--sp-5); }
+.privacy-head .sub { font-size: var(--fs-lg); color: var(--muted); margin: 0; }
+
+.redact {
+  position: relative; margin: 0 0 var(--sp-16);
+  background: var(--bg-raised); border: 1px solid var(--line); border-radius: var(--r-lg);
+  padding: var(--sp-10) var(--sp-9); box-shadow: var(--sh-lg); overflow: hidden;
+}
+.redact-cap { margin: 0 0 var(--sp-6); color: var(--faint); }
+.redact-page { max-width: 62ch; }
+.redact-title { font-family: 'Newsreader', serif; font-size: var(--fs-xl); font-weight: 500; margin: 0 0 var(--sp-2); }
+.redact-meta { margin: 0 0 var(--sp-5); }
+.redact-body { font-size: var(--fs-base); line-height: 1.75; color: var(--muted); margin: 0 0 var(--sp-4); }
+
+/* JS drives --blur/--fade; the lock fades in as the text goes away. */
+.js .redact-page { filter: blur(var(--blur, 0px)); opacity: var(--fade, 1); transition: filter .1s linear, opacity .1s linear; }
+.redact-lock {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  color: var(--accent); opacity: var(--lock, 0); pointer-events: none;
+}
+
+.privacy-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--sp-5); }
+
+/* ---------- 04 · parallax showcase ---------- */
+.showcase-x { position: relative; max-width: 1240px; margin: 0 auto; padding: var(--sp-24) var(--sp-6) var(--sp-28); overflow: clip; }
+.showcase-copy { max-width: 900px; margin: 0 auto var(--sp-20); text-align: center; }
+.showcase-copy h2 {
+  font-weight: 500; font-size: var(--fs-sect); line-height: 1.04;
+  letter-spacing: -0.03em; margin: 0 auto var(--sp-5); max-width: 18ch;
+}
+.showcase-copy .sub { font-size: var(--fs-lg); color: var(--muted); margin: 0 auto; max-width: 46ch; }
+
+.showcase-stage { position: relative; display: flex; align-items: flex-end; justify-content: center; gap: var(--sp-9); flex-wrap: wrap; }
+.sc-devices { display: flex; align-items: flex-end; justify-content: center; gap: var(--sp-9); flex-wrap: wrap; }
+
+.sc-photo { margin: 0; position: absolute; z-index: 0; border-radius: var(--r-md); overflow: hidden; box-shadow: var(--sh-lg); }
+.sc-photo img { display: block; width: 100%; }
+.sc-photo-l { left: -2%; bottom: 4%; width: 26%; max-width: 300px; }
+.sc-photo-r { right: -2%; top: -6%; width: 20%; max-width: 230px; }
+.sc-devices { position: relative; z-index: 1; }
+
+@media (max-width: 900px) {
+  .sc-photo { display: none; }
+}
+
+/* ---------- reduced motion / no-JS neutralisation ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-cue i { animation: none; transform: scaleY(1); }
+  .js [data-split], .js [data-split-words] { opacity: 1 !important; }
+  .js .redact-page { filter: none !important; opacity: 1 !important; }
+  .redact-lock { opacity: 0 !important; }
+  .hero-fallback .hf-b { opacity: 0 !important; }
+  .rail-track { transform: none !important; }
+}
