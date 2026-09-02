@@ -95,9 +95,6 @@ node scripts/gen-og.cjs http://127.0.0.1:8899
 
 ## Known gaps / next steps
 
-- **The App Store links are placeholders.** All three badges and the header
-  "Download" button point at `#`. Nothing else matters until these point at the real
-  App Store URL.
 - **No lifestyle photography.** Every image is a flat UI screenshot; there's no human
   presence. Commissioned or art-directed photography is the single biggest remaining
   upgrade to how premium the site feels.
