@@ -121,9 +121,11 @@ h1, h2, h3 {
 
 .mono {
   font-family: 'Bellota Text', 'Alegreya Sans', sans-serif;
-  font-size: var(--fs-xs); font-weight: 700;
+  font-size: 13px; font-weight: 700;
   letter-spacing: .08em; text-transform: uppercase;
   color: var(--faint);
+  /* Bellota's heaviest cut is 700; the stroke thickens it a touch further. */
+  -webkit-text-stroke: .25px currentColor;
 }
 .serif { font-family: 'Newsreader', serif; }
 .wordmark { font-family: 'Biorka', serif; font-weight: 600; letter-spacing: -0.01em; }
@@ -224,7 +226,7 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-6px) rotate
 .appstore-badge:hover { opacity: .85; }
 .appstore-badge img { display: block; height: 53px; width: auto; }
 .appstore-badge.small img { height: 44px; }
-.price-note { font-family: 'Bellota Text', 'Alegreya Sans', sans-serif; font-size: var(--fs-xs); color: var(--faint); margin: 0; }
+.price-note { font-family: 'Bellota Text', 'Alegreya Sans', sans-serif; font-size: 14px; font-weight: 700; -webkit-text-stroke: .25px currentColor; color: var(--faint); margin: 0; }
 
 /* ---------- 5. Device frames (flat) ---------- */
 .frame { background: var(--ink); border-radius: 46px; padding: 10px; width: 300px; max-width: 100%; }
@@ -268,8 +270,9 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-6px) rotate
 .trail-list::after { background: var(--accent); transform: scaleY(var(--p, 0)); transform-origin: top; }
 .trail-list a {
   display: flex; align-items: center; gap: 14px; text-decoration: none;
-  font-family: 'Bellota Text', 'Alegreya Sans', sans-serif; font-size: var(--fs-xs); font-weight: 700;
+  font-family: 'Bellota Text', 'Alegreya Sans', sans-serif; font-size: 13px; font-weight: 700;
   letter-spacing: .08em; text-transform: uppercase; color: var(--faint);
+  -webkit-text-stroke: .25px currentColor;
 }
 .trail-list a i {
   position: relative; z-index: 1; width: 11px; height: 11px; border-radius: 50%;
@@ -340,7 +343,7 @@ main { display: block; overflow-x: clip; }
 .diptych { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); margin-top: var(--sp-12); }
 .dip { border-radius: var(--r-xl); overflow: hidden; border: 1px solid var(--stone); aspect-ratio: 2 / 3; }
 .dip img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.diptych figcaption { grid-column: 1 / -1; margin-top: var(--sp-2); text-transform: none; letter-spacing: .02em; font-size: var(--fs-xs); }
+.diptych figcaption { grid-column: 1 / -1; margin-top: var(--sp-2); text-transform: none; letter-spacing: .02em; font-size: 14px; }
 .diptych.wide { grid-template-columns: 2fr 3fr; margin-top: var(--sp-4); }
 .diptych.wide .dip { aspect-ratio: auto; height: clamp(220px, 30vw, 400px); }
 
@@ -369,7 +372,7 @@ main { display: block; overflow-x: clip; }
 
 .specimen { margin-top: var(--sp-10); width: 200px; }
 .specimen img { display: block; width: 100%; border-radius: var(--r-md); border: 1px solid var(--stone); }
-.specimen figcaption { margin-top: var(--sp-2); text-transform: none; letter-spacing: .02em; font-size: var(--fs-xs); }
+.specimen figcaption { margin-top: var(--sp-2); text-transform: none; letter-spacing: .02em; font-size: 14px; }
 .specimen.lg { width: 320px; max-width: 100%; }
 .specimen.lg img { border-radius: var(--r-xl); }
 
