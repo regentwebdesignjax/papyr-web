@@ -1,6 +1,6 @@
 /* Papyr — site behaviour.
-   Routing, header state, mobile nav, FAQ accordions, scroll reveals.
-   No dependencies. */
+   Routing, header state, mobile nav, FAQ accordions, arrival reveals, and the
+   trail (waypoint progress marker). No dependencies. */
 (function () {
   'use strict';
 
@@ -9,7 +9,7 @@
 
   /* Route name -> { id, path, title } */
   var ROUTES = {
-    landing: { id: 'page-landing', path: '/',        title: 'Papyr — A calm, private place for your words' },
+    landing: { id: 'page-landing', path: '/',        title: 'Papyr — A calm, private place for your thoughts' },
     support: { id: 'page-support', path: '/support', title: 'Support — Papyr' },
     terms:   { id: 'page-terms',   path: '/terms',   title: 'Terms of Service — Papyr' },
     privacy: { id: 'page-privacy', path: '/privacy', title: 'Privacy Policy — Papyr' }
@@ -26,14 +26,64 @@
   function currentPage() { return body.getAttribute('data-page') || 'landing'; }
 
   /* ---------- header ---------- */
-  var ticking = false;
   function updateHeader() {
-    var solid = (window.scrollY || document.documentElement.scrollTop) > 24 || currentPage() !== 'landing';
+    var solid = (window.scrollY || document.documentElement.scrollTop) > 8 || currentPage() !== 'landing';
     header.classList.toggle('solid', solid);
-    ticking = false;
   }
+
+  /* ---------- trail ---------- */
+  /* The landing page is a route with waypoints. The marker fills to the
+     summit (the pricing section) rather than the end of the document, so
+     arriving at the price is arriving at the top — the FAQ below is the walk
+     back down. Elevation is 4,990 ft: a nod to the $4.99. */
+  var SUMMIT_FT = 4990;
+  var trailList = document.querySelector('[data-trail] .trail-list');
+  var trailBar = document.querySelector('[data-trail-bar]');
+  var trailElev = document.querySelector('[data-trail-elev]');
+  var dots = {};
+  document.querySelectorAll('[data-trail-dot]').forEach(function (a) { dots[a.getAttribute('data-trail-dot')] = a; });
+  var waypoints = Array.prototype.slice.call(document.querySelectorAll('[data-wp]'));
+  var lastElev = -1;
+
+  function updateTrail() {
+    if (currentPage() !== 'landing' || !waypoints.length) return;
+    var y = window.scrollY || document.documentElement.scrollTop;
+    var vh = window.innerHeight;
+    var summit = document.getElementById('pricing');
+    var end = summit ? summit.offsetTop + summit.offsetHeight * 0.5 - vh * 0.5 : document.documentElement.scrollHeight - vh;
+    var p = end > 0 ? Math.min(1, Math.max(0, y / end)) : 0;
+
+    if (trailList) trailList.style.setProperty('--p', p.toFixed(4));
+    if (trailBar) trailBar.style.setProperty('--p', p.toFixed(4));
+
+    var ft = Math.round(p * SUMMIT_FT);
+    if (trailElev && ft !== lastElev) {
+      lastElev = ft;
+      trailElev.textContent = ft.toLocaleString('en-US');
+    }
+
+    // Active waypoint: the last one whose top has crossed 40% of the viewport.
+    var probe = y + vh * 0.4;
+    var activeId = waypoints[0].id;
+    for (var i = 0; i < waypoints.length; i++) {
+      if (waypoints[i].offsetTop <= probe) activeId = waypoints[i].id;
+    }
+    var passed = true;
+    for (var id in dots) {
+      var a = dots[id];
+      var isActive = id === activeId;
+      a.classList.toggle('is-active', isActive);
+      a.classList.toggle('is-passed', passed && !isActive);
+      if (isActive) passed = false;
+    }
+  }
+
+  var ticking = false;
   function onScroll() {
-    if (!ticking) { ticking = true; window.requestAnimationFrame(updateHeader); }
+    if (!ticking) {
+      ticking = true;
+      window.requestAnimationFrame(function () { updateHeader(); updateTrail(); ticking = false; });
+    }
   }
 
   /* ---------- mobile nav ---------- */
@@ -70,11 +120,13 @@
     }
     if (!opts.keepScroll) window.scrollTo(0, 0);
     updateHeader();
+    updateTrail();
     observeReveal();
   }
 
   function goAnchor(id) {
     function doScroll(attempt) {
+      if (id === 'top') { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
       var el = document.getElementById(id);
       if (el) {
         window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 66, behavior: 'smooth' });
@@ -127,7 +179,7 @@
     });
   });
 
-  /* ---------- scroll reveals ---------- */
+  /* ---------- arrival reveals ---------- */
   var io = null;
   function observeReveal() {
     if (!('IntersectionObserver' in window)) {
@@ -139,13 +191,15 @@
         entries.forEach(function (en) {
           if (en.isIntersecting) { en.target.classList.add('seen'); io.unobserve(en.target); }
         });
-      }, { rootMargin: '0px 0px -12% 0px' });
+      }, { rootMargin: '0px 0px -10% 0px' });
     }
     document.querySelectorAll('.io:not(.seen)').forEach(function (el) { io.observe(el); });
   }
 
   /* ---------- init ---------- */
   window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  window.addEventListener('load', updateTrail);
   document.getElementById('year').textContent = new Date().getFullYear();
   showPage(routeFromPath(location.pathname), { replace: true, keepScroll: true });
 })();

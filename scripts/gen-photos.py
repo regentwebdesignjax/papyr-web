@@ -33,6 +33,10 @@ JOBS = {
     "notebook-001": dict(strength=0.40, warmth=0.014, lift=0.015, widths=(960, 1440, 2000)),
     "notebook-002": dict(strength=0.46, warmth=0.040, lift=0.020, widths=(960, 1440, 2000)),
     "notebook-003": dict(strength=0.46, warmth=0.038, lift=0.030, widths=(960, 1440)),
+    # Field-journal plates (src names the source file when it differs)
+    "ridge-dawn":   dict(src="mountain-ridge-fog-sunrise", strength=0.34, warmth=0.030, lift=0.030, widths=(960, 1440, 2000)),
+    "topo-map":     dict(src="vintage-topographic-map", strength=0.40, warmth=0.020, lift=0.0, widths=(640, 960)),
+    "fountain-pen": dict(src="fountain-pen-handwriting-journal", strength=0.38, warmth=0.024, lift=0.015, widths=(960, 1440, 2000)),
 }
 
 
@@ -62,7 +66,7 @@ def main():
     os.makedirs(OUT_DIR, exist_ok=True)
     total = 0
     for name, cfg in JOBS.items():
-        src = os.path.join(SRC_DIR, f"{name}.jpg")
+        src = os.path.join(SRC_DIR, f"{cfg.get('src', name)}.jpg")
         if not os.path.exists(src):
             print(f"  !! missing {src}")
             continue
