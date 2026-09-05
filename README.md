@@ -11,8 +11,8 @@ Serve the repo root (`python3 -m http.server`, `npx http-server`, Netlify, …).
 | File | Purpose |
 | --- | --- |
 | `index.html` | Markup for all four views + head/SEO/JSON-LD |
-| `styles.css` | Design system — tokens, components, dark mode |
-| `main.js` | Routing, header state, mobile nav, accordions, reveals |
+| `styles.css` | Design system — tokens, flat components, the trail |
+| `main.js` | Routing, header state, mobile nav, accordions, reveals, trail progress |
 | `netlify.toml` | Route rewrites, cache headers, security headers |
 | `site.webmanifest` | PWA/homescreen metadata |
 | `assets/` | Fonts, screenshots, icons, texture |
@@ -34,12 +34,16 @@ token, not a component.
 
 - **Type**: Newsreader (headings), Alegreya Sans (body), IBM Plex Mono (eyebrows),
   Biorka (wordmark).
-- **Dark mode**: a warm dark theme via `prefers-color-scheme`, suited to a bedside app.
-- **Motion**: staggered directional scroll reveals, gated behind a `.js` class so content
-  is never left invisible if scripting doesn't run, and fully disabled under
-  `prefers-reduced-motion`.
-- **Depth**: device frames are drawn hardware (gradient body, bezel highlight, inset
-  screen well, layered ambient + contact shadow) rather than flat rectangles.
+- **Flat**: no drop shadows, no gradients. Depth comes from surface tone (canvas →
+  card → manilla → oat) and hairline borders. The footer is the only dark surface, and
+  the filled terracotta button is the only loud element.
+- **The trail**: the landing page is structured as a route with numbered waypoints. On
+  wide screens a fixed marker down the left edge fills as you scroll and counts
+  elevation up to 4,990 ft (the $4.99); on narrow screens it becomes a hairline under
+  the header. The sticky number column beside each chapter is plain CSS `position:
+  sticky` — there is no scroll library.
+- **Motion**: arrival reveals only, gated behind a `.js` class so content is never left
+  invisible if scripting doesn't run, and fully disabled under `prefers-reduced-motion`.
 
 ### Two non-obvious CSS rules — don't "clean these up"
 
@@ -47,8 +51,9 @@ token, not a component.
    presentational hints. Setting only a CSS `width` does **not** override the hinted
    height, and every screenshot renders at full intrinsic height (the page doubles in
    length).
-2. The grain-stacking rule deliberately excludes `header`. `body > header` is more
-   specific than `header`, so including it silently overrides `position: fixed`.
+2. The fixed site header is styled by the bare `header` selector. Chapter plates inside
+   the page are therefore `<div class="wp-plate">`, not `<header>` — using `<header>`
+   there pins every chapter title to the top of the viewport.
 
 ## Privacy
 
@@ -74,7 +79,9 @@ hosted font re-introduces third-party tracking on a privacy-first product.
 | `assets/ios/06_new_journal.png` | spare, not currently referenced |
 | `assets/ipad/01.*` | showcase (iPad) |
 | `assets/mac/01-homepage.*` | showcase (Mac) |
-| `assets/paper-texture.webp` | tileable texture behind the cream bands |
+| `assets/photos/*.webp` | graded lifestyle photography (generated) |
+| `assets/papyr-redesign/*.jpg` | photo sources for `gen-photos.py` |
+| `assets/specimens-src/` | small Unsplash inserts + `CREDITS.md` |
 | `assets/fonts/` | Biorka + self-hosted webfonts |
 
 Screenshots ship as an optimized **`.webp`** (~2× display width) alongside the
@@ -85,7 +92,9 @@ WebP instead of ~24 MB of PNG; the PNGs remain the source of truth.
 
 ```bash
 python3 scripts/gen-webp.py     # WebP copies of screenshots (needs Pillow)
-python3 scripts/gen-assets.py   # paper texture + favicon set (needs Pillow, numpy)
+python3 scripts/gen-assets.py   # favicon set (needs Pillow, numpy)
+python3 scripts/gen-photos.py   # grade + encode the photography (needs Pillow, numpy)
+python3 scripts/gen-specimens.py
 python3 scripts/fetch-fonts.py  # re-download self-hosted webfonts
 
 # social card — renders scripts/og-template.html in a real browser
@@ -95,12 +104,9 @@ node scripts/gen-og.cjs http://127.0.0.1:8899
 
 ## Known gaps / next steps
 
-- **The App Store links are placeholders.** All three badges and the header
-  "Download" button point at `#`. Nothing else matters until these point at the real
-  App Store URL.
-- **No lifestyle photography.** Every image is a flat UI screenshot; there's no human
-  presence. Commissioned or art-directed photography is the single biggest remaining
-  upgrade to how premium the site feels.
+- **Photo credits.** Three of the plates (`fountain-pen`, `ridge-dawn`, `topo-map`)
+  came from Unsplash without a recorded photographer — see
+  `assets/specimens-src/CREDITS.md` to fill them in.
 - **No social proof.** No ratings, reviews, or founder story. Deliberately left empty
   rather than filled with placeholder claims — add only real ones.
 - The canonical/OG URLs assume `https://papyr.regentmediagroup.com`. Update them if the
