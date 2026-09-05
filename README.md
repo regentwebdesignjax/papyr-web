@@ -32,7 +32,7 @@ All tokens live in `:root` at the top of `styles.css` — colour, a type scale, 
 spacing scale, radii, a four-step warm elevation scale, and easing curves. Change a
 token, not a component.
 
-- **Type**: Newsreader (headings), Alegreya Sans (body), IBM Plex Mono (eyebrows),
+- **Type**: Newsreader (headings), Alegreya Sans (body), Bellota Text (eyebrows, labels),
   Biorka (wordmark).
 - **Flat**: no drop shadows, no gradients. Depth comes from surface tone (canvas →
   card → manilla → oat) and hairline borders. The footer is the only dark surface, and

@@ -120,8 +120,8 @@ h1, h2, h3 {
 }
 
 .mono {
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: var(--fs-2xs); font-weight: 600;
+  font-family: 'Bellota Text', 'Alegreya Sans', sans-serif;
+  font-size: var(--fs-xs); font-weight: 700;
   letter-spacing: .08em; text-transform: uppercase;
   color: var(--faint);
 }
@@ -224,7 +224,7 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-6px) rotate
 .appstore-badge:hover { opacity: .85; }
 .appstore-badge img { display: block; height: 53px; width: auto; }
 .appstore-badge.small img { height: 44px; }
-.price-note { font-family: 'IBM Plex Mono', monospace; font-size: var(--fs-xs); color: var(--faint); margin: 0; }
+.price-note { font-family: 'Bellota Text', 'Alegreya Sans', sans-serif; font-size: var(--fs-xs); color: var(--faint); margin: 0; }
 
 /* ---------- 5. Device frames (flat) ---------- */
 .frame { background: var(--ink); border-radius: 46px; padding: 10px; width: 300px; max-width: 100%; }
@@ -268,7 +268,7 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-6px) rotate
 .trail-list::after { background: var(--accent); transform: scaleY(var(--p, 0)); transform-origin: top; }
 .trail-list a {
   display: flex; align-items: center; gap: 14px; text-decoration: none;
-  font-family: 'IBM Plex Mono', monospace; font-size: var(--fs-2xs); font-weight: 600;
+  font-family: 'Bellota Text', 'Alegreya Sans', sans-serif; font-size: var(--fs-xs); font-weight: 700;
   letter-spacing: .08em; text-transform: uppercase; color: var(--faint);
 }
 .trail-list a i {

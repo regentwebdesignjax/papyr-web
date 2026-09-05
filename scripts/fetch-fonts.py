@@ -20,7 +20,7 @@ GOOGLE_CSS = (
     "https://fonts.googleapis.com/css2"
     "?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500"
     "&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400"
-    "&family=IBM+Plex+Mono:wght@500;600"
+    "&family=Bellota+Text:wght@400;700"
     "&display=swap"
 )
 KEEP_SUBSETS = ("latin", "latin-ext")
