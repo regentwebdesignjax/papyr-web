@@ -45,7 +45,7 @@ token, not a component.
 - **Motion**: arrival reveals only, gated behind a `.js` class so content is never left
   invisible if scripting doesn't run, and fully disabled under `prefers-reduced-motion`.
 
-### Two non-obvious CSS rules — don't "clean these up"
+### Three non-obvious CSS rules — don't "clean these up"
 
 1. `img { height: auto; }` — the `width`/`height` attributes on screenshots are
    presentational hints. Setting only a CSS `width` does **not** override the hinted
@@ -54,6 +54,20 @@ token, not a component.
 2. The fixed site header is styled by the bare `header` selector. Chapter plates inside
    the page are therefore `<div class="wp-plate">`, not `<header>` — using `<header>`
    there pins every chapter title to the top of the viewport.
+3. `min-width: 0` on grid and flex items (`.wp-body`, `.split-copy`, `.mac`, `.pair`,
+   …), and `minmax(0, 1fr)` rather than a bare `1fr` for every track. The spec default
+   is `min-width: auto`, which refuses to shrink an item below its content — one
+   fixed-width figure then stretches its whole section past the viewport. Because the
+   page clips overflow (below), that goes unnoticed: nothing scrolls sideways, the
+   section is just cropped off-screen on phones.
+
+### Why overflow is clipped, and how to catch what it hides
+
+`body { overflow-x: hidden }` and `main { overflow-x: clip }` exist so the reveal
+animations' horizontal offset can't widen the page. The cost is that real layout
+overflow is silent. `node scripts/check-responsive.cjs` measures every element against
+the viewport at eight widths across all four routes and exits non-zero if anything
+hangs over the edge — run it after touching layout CSS.
 
 ## Privacy
 
@@ -96,6 +110,10 @@ python3 scripts/gen-assets.py   # favicon set (needs Pillow, numpy)
 python3 scripts/gen-photos.py   # grade + encode the photography (needs Pillow, numpy)
 python3 scripts/gen-specimens.py
 python3 scripts/fetch-fonts.py  # re-download self-hosted webfonts
+
+# layout check — fails if anything overflows the viewport on mobile
+python3 -m http.server 8899 &
+node scripts/check-responsive.cjs
 
 # social card — renders scripts/og-template.html in a real browser
 python3 -m http.server 8899 &
