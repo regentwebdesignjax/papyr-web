@@ -235,18 +235,21 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-6px) rotate
 
 /* The px widths below are each frame's *maximum*, not a fixed size. Every
    frame is a shrinkable flex item (flex-shrink:1 + min-width:0), so a narrow
-   container scales them down proportionally instead of overflowing it. The
-   bezel padding scales with the frame for the same reason — a fixed 14px
-   bezel on a 200px-wide Mac reads as a picture frame, not hardware. */
-.tablet { width: 240px; padding: 3.75%; border-radius: 26px; background: var(--ink); }
+   container scales them down instead of overflowing it.
+
+   Bezels stay in px on purpose. A percentage padding resolves against the
+   *containing block's* width, not the element's own — on a 240px iPad inside
+   a 414px .pair, `padding: 3.75%` renders 15.5px, not 9px. Narrow screens get
+   thinner bezels from the breakpoint below instead. */
+.tablet { width: 240px; padding: 9px; border-radius: 26px; background: var(--ink); }
 .tablet .screen { border-radius: 18px; overflow: hidden; }
 .tablet img { display: block; width: 100%; }
-.mini { width: 150px; padding: 4.6%; border-radius: 30px; background: var(--ink); }
+.mini { width: 150px; padding: 7px; border-radius: 30px; background: var(--ink); }
 .mini .screen { border-radius: 24px; overflow: hidden; }
 .mini img { display: block; width: 100%; }
 
 .mac { width: 640px; max-width: 100%; }
-.mac .lid { padding: 2.2% 2.2% 0; border-radius: 16px 16px 0 0; background: var(--ink); }
+.mac .lid { padding: 14px 14px 0; border-radius: 16px 16px 0 0; background: var(--ink); }
 .mac .screen { border-radius: 5px 5px 0 0; overflow: hidden; }
 .mac img { display: block; width: 100%; }
 .mac .chin { height: 14px; border-radius: 0 0 4px 4px; background: var(--ink); }
@@ -255,6 +258,18 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-6px) rotate
 /* Basis, not width: the two shrink together and keep their size relationship. */
 .pair .tablet { flex: 0 1 240px; }
 .pair .mini { flex: 0 1 150px; }
+/* Once the frames shrink, a bezel drawn for a 240px iPad reads as a chunky
+   surround on a 120px one. Thin the bezel and tighten the corner radii to
+   keep them looking like hardware at small sizes. */
+@media (max-width: 599px) {
+  .mac .lid { padding: 8px 8px 0; border-radius: 11px 11px 0 0; }
+  .mac .chin { height: 9px; }
+  .tablet { padding: 5px; border-radius: 16px; }
+  .tablet .screen { border-radius: 11px; }
+  .mini { padding: 4px; border-radius: 19px; }
+  .mini .screen { border-radius: 15px; }
+}
+
 /* min-width:0 is load-bearing on every flex/grid item in this chain — the
    `auto` default refuses to shrink below content size, which is what pushed
    this whole section past the viewport on phones. */
