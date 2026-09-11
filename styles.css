@@ -233,6 +233,14 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-6px) rotate
 .frame.phone.sm { width: 230px; padding: 8px; border-radius: 38px; }
 .frame.phone.sm .screen { border-radius: 30px; }
 
+/* The px widths below are each frame's *maximum*, not a fixed size. Every
+   frame is a shrinkable flex item (flex-shrink:1 + min-width:0), so a narrow
+   container scales them down instead of overflowing it.
+
+   Bezels stay in px on purpose. A percentage padding resolves against the
+   *containing block's* width, not the element's own — on a 240px iPad inside
+   a 414px .pair, `padding: 3.75%` renders 15.5px, not 9px. Narrow screens get
+   thinner bezels from the breakpoint below instead. */
 .tablet { width: 240px; padding: 9px; border-radius: 26px; background: var(--ink); }
 .tablet .screen { border-radius: 18px; overflow: hidden; }
 .tablet img { display: block; width: 100%; }
@@ -246,8 +254,26 @@ body.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-6px) rotate
 .mac img { display: block; width: 100%; }
 .mac .chin { height: 14px; border-radius: 0 0 4px 4px; background: var(--ink); }
 
-.pair { display: flex; align-items: flex-end; gap: var(--sp-6); flex-wrap: wrap; justify-content: center; }
-@media (max-width: 480px) { .tablet { width: 190px; } .mini { width: 120px; } }
+.pair { display: flex; align-items: flex-end; gap: var(--sp-6); justify-content: center; }
+/* Basis, not width: the two shrink together and keep their size relationship. */
+.pair .tablet { flex: 0 1 240px; }
+.pair .mini { flex: 0 1 150px; }
+/* Once the frames shrink, a bezel drawn for a 240px iPad reads as a chunky
+   surround on a 120px one. Thin the bezel and tighten the corner radii to
+   keep them looking like hardware at small sizes. */
+@media (max-width: 599px) {
+  .mac .lid { padding: 8px 8px 0; border-radius: 11px 11px 0 0; }
+  .mac .chin { height: 9px; }
+  .tablet { padding: 5px; border-radius: 16px; }
+  .tablet .screen { border-radius: 11px; }
+  .mini { padding: 4px; border-radius: 19px; }
+  .mini .screen { border-radius: 15px; }
+}
+
+/* min-width:0 is load-bearing on every flex/grid item in this chain — the
+   `auto` default refuses to shrink below content size, which is what pushed
+   this whole section past the viewport on phones. */
+.mac, .pair, .pair .tablet, .pair .mini { min-width: 0; }
 
 /* ---------- 6. Trail ---------- */
 /* Fixed route marker down the left edge. Only on the landing page and only
@@ -304,8 +330,13 @@ main { display: block; overflow-x: clip; }
   border-top: 1px solid var(--stone); padding-top: var(--sp-3); margin: 0 0 var(--sp-8);
 }
 
-/* Marker column + body */
+/* Marker column + body.
+   Both tracks are minmax(0, …) and .wp-body carries min-width:0 so the body
+   column is capped by the grid instead of being widened by its widest child.
+   Without that, one over-wide figure stretches the whole waypoint past the
+   viewport — invisibly, because the page clips overflow-x. */
 .wp-grid { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: var(--sp-12); }
+.wp-body { min-width: 0; }
 .wp-marker { position: sticky; top: calc(var(--header-h) + var(--sp-8)); align-self: start; }
 .wp-marker p { margin: 0; }
 .wp-marker b {
@@ -320,7 +351,9 @@ main { display: block; overflow-x: clip; }
 
 @media (max-width: 899px) {
   .wp { padding: var(--sp-16) 0; }
-  .wp-grid { grid-template-columns: 1fr; gap: var(--sp-6); }
+  /* minmax(0, 1fr), not 1fr — a bare 1fr track is min-content-floored and
+     lets a wide child stretch the column past the screen. */
+  .wp-grid { grid-template-columns: minmax(0, 1fr); gap: var(--sp-6); }
   .wp-marker { position: static; display: flex; align-items: baseline; gap: var(--sp-4); }
   .wp-marker b { display: inline; font-size: 28px; margin: 0 var(--sp-2) 0 0; }
   .wp-marker .wp-elev { margin: 0 0 0 auto; }
@@ -364,6 +397,7 @@ main { display: block; overflow-x: clip; }
 
 /* Copy + device */
 .split { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--sp-16); align-items: center; }
+.split-copy, .split-media { min-width: 0; }
 .split-copy p:not(.mono) { font-size: var(--fs-lg); line-height: var(--lh-body); color: var(--muted); max-width: 40ch; margin: 0; }
 .split-media { display: flex; justify-content: center; }
 
@@ -398,9 +432,11 @@ main { display: block; overflow-x: clip; }
 /* 05 · Every device */
 .devices {
   display: flex; align-items: flex-end; justify-content: center; gap: var(--sp-9); flex-wrap: wrap;
-  padding: var(--sp-12) var(--sp-6) 0; overflow: hidden;
+  padding: var(--sp-12) var(--sp-6) 0; overflow: hidden; min-width: 0;
   background: var(--oat); border: 1px solid var(--stone); border-radius: var(--r-xl);
 }
+.devices .mac { flex: 0 1 640px; }
+.devices .pair { flex: 0 1 414px; }
 
 /* 06 · Summit */
 .summit-grid { display: grid; grid-template-columns: minmax(0, 520px) 320px; gap: var(--sp-16); align-items: start; }
@@ -443,13 +479,18 @@ main { display: block; overflow-x: clip; }
 @media (max-width: 899px) {
   .hero-grid { grid-template-columns: 1fr; gap: var(--sp-10); padding-top: calc(var(--header-h) + var(--sp-10)); }
   .hero-device .frame { width: 260px; }
+  /* Three devices squeezed into one phone-width row leaves the Mac too small
+     to read as a Mac. Give it the full row and let the pair sit beneath. */
+  .devices { gap: var(--sp-8); padding: var(--sp-8) var(--sp-5) 0; }
+  .devices .mac { flex: 0 0 100%; }
+  .devices .pair { flex: 0 1 100%; }
   .route { grid-template-columns: 1fr; padding: var(--sp-6); gap: var(--sp-6); }
   .route-list a { grid-template-columns: 32px minmax(0, 1fr) auto; grid-template-areas: 'n name elev' 'n note elev'; row-gap: 2px; }
   .route-list a > .mono:first-child { grid-area: n; }
   .route-name { grid-area: name; }
   .route-note { grid-area: note; }
   .route-elev { grid-area: elev; align-self: center; }
-  .split { grid-template-columns: 1fr; gap: var(--sp-10); }
+  .split { grid-template-columns: minmax(0, 1fr); gap: var(--sp-10); }
   .split-media { order: -1; justify-content: flex-start; }
   .split-media .frame { width: 240px; }
   .cards { grid-template-columns: 1fr; }
